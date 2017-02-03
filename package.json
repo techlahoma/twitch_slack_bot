@@ -1,0 +1,16 @@
+{
+  "name": "twitch_chat_bot",
+  "version": "1.0.0",
+  "description": "A slack integration for twitch",
+  "main": "irc.js",
+  "dependencies": {
+    "slackbots": "^1.0.2",
+    "tmi.js": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
