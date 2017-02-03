@@ -10,6 +10,11 @@ const twitchkey = config.twitchkey;
 const twitch_channels = config.twitch_channels;
 
 
+let slackusers = {};	
+let slackchannels = {};
+let twitchusers = {};
+
+
 let _slackBotSettings = {};
 _slackBotSettings.token= slackkey;
 _slackBotSettings.name= slackname;
@@ -38,13 +43,25 @@ let bot = new Bot(_slackBotSettings);
 
 
 bot.on('start', function() {
-	console.log('slack bot channel is,'+ slackChannel);
-    bot.postMessageToChannel(slackChannel, 'Hello channel! Oh wait... nevermind...');
+    users = bot.users.filter(user=> user.name != bot.name);
+    channels = bot.channels;
 });
 
 
+
 bot.on('message', function(message){
-	console.log(message);
+	if(message.channel){
+	let channel = channels.map(x => x.id).indexOf(message.channel);
+			if(channels[channel].name == slackChannel){
+			let user = users.map(x => {
+					return x.id;
+				}).indexOf(message.user);
+
+				if(message.type == "message" && message.text && user != -1){
+					slackToTwitch(users[user].name,message.text);		
+				}
+		}
+	}
 })
 
 
@@ -53,13 +70,14 @@ let client = new tmi.client(_twitchBotSettings);
 client.connect();
 
 client.on('connected', function(){
-	console.log('twitch connection has been established');
+	console.log('twitch bot has started!');
 })
 
 
 client.on('chat', function(channel, user, message, self){
-	console.log(user.username+' said.. sent a message.... '+ message);
-	twitchToSlack(user.username,message);
+	if(self !=true){
+		twitchToSlack(user.username,message);
+	}
 })
 
 
@@ -73,9 +91,11 @@ function twitchToSlack(username,message){
 
 
 function slackToTwitch(username,message){
+
 	if(username && message){
 		let _string ="On slack, user "+username+" said "+message;
-		bot.postMessageToChannel(twitch_channels,_string)
+		twitch_channels.foreach
+		client.action(twitch_channels[0],_string);
 	}
 }
 
