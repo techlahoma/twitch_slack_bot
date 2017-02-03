@@ -64,7 +64,6 @@ client.on('chat', function(channel, user, message, self){
 
 
 
-
 function twitchToSlack(username,message){
 	if(username && message){
 		let _string ="On twitch, user "+username+" said "+message;
