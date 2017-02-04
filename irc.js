@@ -1,5 +1,11 @@
 const Bidi = require('./bidibot.js');
+const http = require('http');
 
+http.createServer((req,res) =>{
+	res.writeHead(404, {'Content-Type': 'text/html'});
+	res.end("This is a relay server");
+
+}).listen(process.env.PORT || 8080);
 
 let slackKey = process.env.SLACK_KEY;
 let slackName = process.env.SLACK_NAME;
