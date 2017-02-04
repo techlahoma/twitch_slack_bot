@@ -84,8 +84,8 @@ client.on('chat', function(channel, user, message, self){
 
 function twitchToSlack(username,message){
 	if(username && message){
-		let _string ="On twitch, user "+username+" said "+message;
-		bot.postMessageToChannel(slackChannel,_string)
+		let _string = "On Twitch, *" + username + "* said: \n>>>" + message;
+		bot.postMessageToChannel(slackChannel, _string)
 	}
 }
 
@@ -93,9 +93,9 @@ function twitchToSlack(username,message){
 function slackToTwitch(username,message){
 	console.log('here works')
 	if(username && message){
-		let _string ="On slack, user "+username+" said "+message;
-		console.log('and here works')
-		client.action(_twitchBotSettings.channels[0],_string);
+        let _string = "On Slack, " + username + " said: " + message;
+        twitch_channels.foreach
+        client.action(_twitchBotSettings.channels[0],_string);
 	}
 }
 
