@@ -4,12 +4,13 @@
   "description": "A slack integration for twitch",
   "main": "irc.js",
   "dependencies": {
+    "es6-plato": "^1.0.12",
     "slackbots": "^1.0.2",
     "tmi.js": "^1.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node irc.js"
+    "start": "node irc.js"
   },
   "author": "",
   "license": "ISC"
