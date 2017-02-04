@@ -1,11 +1,19 @@
 const Bidi = require('./bidibot.js');
 const http = require('http');
 
+let herokuUrl = process.env.HEROKU_URL;
+
 http.createServer((req,res) =>{
 	res.writeHead(404, {'Content-Type': 'text/html'});
 	res.end("This is a relay server");
 
 }).listen(process.env.PORT || 8080);
+
+setInterval(function() {
+    http.get("http://"+herokuUrl+".herokuapp.com");
+}, 100000);
+
+
 
 let slackKey = process.env.SLACK_KEY;
 let slackName = process.env.SLACK_NAME;
