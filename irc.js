@@ -24,7 +24,6 @@ let bidi = new Bidi({
 process.on('SIGTERM', () => {
   console.log('Received SIGINT.  Press Control-D to exit.');
   process.nextTick(() => process.exit());  	
-  )
   }
 });
 
