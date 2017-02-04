@@ -1,28 +1,23 @@
 const Bidi = require('./bidibot.js');
 const config = require('./config.js');
-// let slackKey = process.env.Slack_Token;
-// let slackName = process.env.Slack_Key;
-// let slackChannel = process.env.Slack_Channel;
-// let twitchName = process.env.Twitch_Name;
-// let twitchKey = process.env.Twitch_Key;
-// let twitchChannel=process.env.Twitch_Channel;
 
 
-
-
-
+let slackKey = process.env.SLACK_TOKEN;
+let slackName = process.env.SLACK_KEY;
+let slackChannel = process.env.SLACK_CHANNEL;
+let twitchName = process.env.TWITCH_NAME;
+let twitchKey = process.env.TWITCH_KEY;
+let twitchChannel=process.env.TWITCH_CHANNEL;
 
 
 let bidi = new Bidi({
-	slackKey : config.slackkey,
-	slackName : config.slackname ,
-	slackChannel: config.slackChannel,
-	twitchName : config.twitchname,
-	twitchKey: config.twitchkey,
-	twitchChannel: config.twitch_channels
+	slackKey,
+	slackName,
+	slackChannel,
+	twitchName,
+	twitchKey,
+	twitchChannel
 })
-
-
 
 
 bidi.start();

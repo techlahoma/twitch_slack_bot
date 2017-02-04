@@ -1,9 +1,7 @@
 const Bot = require('slackbots');
 const tmi = require('tmi.js');
 		
-let slackusers = {};	
-let slackchannels = {};
-let twitchusers = {};
+
 
 let bidi = function Constructor(args){
 	if(args){
@@ -12,6 +10,9 @@ let bidi = function Constructor(args){
 }
 
 bidi.prototype.start = function(){
+	let slackusers = {};	
+	let slackchannels = {};
+	let twitchusers = {};
 	let settings = this.settings;
 	let _slackBotSettings = {};
 	_slackBotSettings.token= settings.slackKey;
@@ -76,7 +77,7 @@ bidi.prototype.start = function(){
 
 		if(username && message){
 			console.log("twitch to slack settings", settings);
-			let _string ="On twitch, user "+username+" said "+message;
+			let _string = "On Twitch, *" + username + "* said: \n>>>" + message;
 			return _string;
 		}	
 	}
@@ -84,7 +85,7 @@ bidi.prototype.start = function(){
 	function slackToTwitch(username,message){
 		if(username && message){
 			console.log('slack to twitch settings', settings);
-			let _string ="On slack, user "+username+" said "+message;
+			let _string = "On Slack, " + username + " said: " + message;
 			return _string;
 		}
 	}
