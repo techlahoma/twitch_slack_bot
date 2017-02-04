@@ -34,8 +34,8 @@ _twitchBotSettings.identity = {
 	username:twitchname,
 	password:twitchkey
 };
-
-_twitchBotSettings.channels= twitch_channels;
+_twitchBotSettings.channels = []
+_twitchBotSettings.channels.push(twitch_channels);
 
 
 //Slack bot and settings
@@ -91,11 +91,11 @@ function twitchToSlack(username,message){
 
 
 function slackToTwitch(username,message){
-
+	console.log('here works')
 	if(username && message){
 		let _string ="On slack, user "+username+" said "+message;
-		twitch_channels.foreach
-		client.action(twitch_channels[0],_string);
+		console.log('and here works')
+		client.action(_twitchBotSettings.channels[0],_string);
 	}
 }
 
