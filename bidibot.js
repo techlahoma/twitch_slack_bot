@@ -28,7 +28,7 @@ bidi.prototype.start = function(){
 		password:settings.twitchKey
 	};
 	_twitchBotSettings.channels = [];
-	_twitchBotSettings.channels.push(settings.twitchChannels);
+	_twitchBotSettings.channels.push(settings.twitchChannel);
 
 	let bot = new Bot(_slackBotSettings);
 
@@ -48,7 +48,8 @@ bidi.prototype.start = function(){
 					if(message.type == "message" && message.text && user != -1){
 							let string = slackToTwitch(users[user].name,message.text);	
 							console.log('the slack to twitch string is... ', string);
-							client.action(settings.twitchChannels,string);	
+							console.log(_twitchBotSettings.channels[0]);
+							client.action(_twitchBotSettings.channels[0],string);	
 					}
 				}
 		}
