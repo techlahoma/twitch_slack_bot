@@ -69,7 +69,7 @@ bidi.prototype.start = function(){
 		console.log('twitch user is chatting...');
 		if(self !=true){
 			let string = twitchToSlack(user.username,message);
-			bot.postMessageToChannel(settings.slackChannel,string);
+			bot.postMessageToChannel(settings.slackChannel,string);	
 		}
 	})
 
