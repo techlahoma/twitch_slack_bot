@@ -1,5 +1,4 @@
 const Bidi = require('./bidibot.js');
-const config = require('./config.js');
 
 
 let slackKey = process.env.SLACK_KEY;
