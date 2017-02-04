@@ -24,8 +24,7 @@ let bidi = new Bidi({
 process.on('SIGTERM', () => {
   console.log('Received SIGINT.  Press Control-D to exit.');
   process.nextTick(() => process.exit());  	
-  }
-});
+  });
 
 process.on('exit', (code) => {
   console.error("Process is about to exit with code #{code}")
