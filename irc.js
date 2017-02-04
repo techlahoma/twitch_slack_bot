@@ -10,6 +10,7 @@ http.createServer((req,res) =>{
 }).listen(process.env.PORT || 8080);
 
 setInterval(function() {
+	console.log('ping sent to server for keep alive');
     http.get("http://"+herokuUrl+".herokuapp.com");
 }, 100000);
 
@@ -36,12 +37,12 @@ let bidi = new Bidi({
 
 
 process.on('SIGTERM', () => {
-  console.log('Received SIGINT.  Press Control-D to exit.');
+  console.log('Received SIGTERM, shutting down');
   process.nextTick(() => process.exit());  	
   });
 
 process.on('exit', (code) => {
-  console.error("Process is about to exit with code #{code}")
+  console.error("Process is about to exit with code ",code);
 });
 
 
