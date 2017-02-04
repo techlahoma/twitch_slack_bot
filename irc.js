@@ -2,8 +2,8 @@ const Bidi = require('./bidibot.js');
 const config = require('./config.js');
 
 
-let slackKey = process.env.SLACK_TOKEN;
-let slackName = process.env.SLACK_KEY;
+let slackKey = process.env.SLACK_KEY;
+let slackName = process.env.SLACK_NAME;
 let slackChannel = process.env.SLACK_CHANNEL;
 let twitchName = process.env.TWITCH_NAME;
 let twitchKey = process.env.TWITCH_KEY;
