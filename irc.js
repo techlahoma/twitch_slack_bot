@@ -17,32 +17,32 @@ setInterval(function() {
 
 
 
-// let slackKey = process.env.SLACK_KEY;
-// let slackName = process.env.SLACK_NAME;
-// let slackChannel = process.env.SLACK_CHANNEL;
-// let twitchName = process.env.TWITCH_NAME;
-// let twitchKey = process.env.TWITCH_KEY;
-// let twitchChannel=process.env.TWITCH_CHANNEL;
+let slackKey = process.env.SLACK_KEY;
+let slackName = process.env.SLACK_NAME;
+let slackChannel = process.env.SLACK_CHANNEL;
+let twitchName = process.env.TWITCH_NAME;
+let twitchKey = process.env.TWITCH_KEY;
+let twitchChannel=process.env.TWITCH_CHANNEL;
 
 
-// let bidi = new Bidi({
-// 	slackKey,
-// 	slackName,
-// 	slackChannel,
-// 	twitchName,
-// 	twitchKey,
-// 	twitchChannel
-// })
+let bidi = new Bidi({
+	slackKey,
+	slackName,
+	slackChannel,
+	twitchName,
+	twitchKey,
+	twitchChannel
+})
 
     
-let bidi = new Bidi({
-	slackKey : config.slackkey,
-	slackName : config.slackname ,
-	slackChannel: config.slackChannel,
-	twitchName : config.twitchname,
-	twitchKey: config.twitchkey,
-	twitchChannel: config.twitch_channels
-})
+// let bidi = new Bidi({
+// 	slackKey : config.slackkey,
+// 	slackName : config.slackname ,
+// 	slackChannel: config.slackChannel,
+// 	twitchName : config.twitchname,
+// 	twitchKey: config.twitchkey,
+// 	twitchChannel: config.twitch_channels
+// })
 
 
 
