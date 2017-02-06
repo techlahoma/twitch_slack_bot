@@ -18,7 +18,6 @@ class Relay {
             console.error('Unsupported bot type. Only Slack and Twitch bots are allowed');
         }
     }
-
     sendMessage(user, message, destination) {
         console.log('Relay has received message: ', message);
         console.log('From:', user);
