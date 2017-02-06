@@ -24,14 +24,32 @@ class Relay {
         console.log('From:', user);
         console.log('To:', destination);
 
+        function getMessageForTwitch()
+        {
+            var regex = /^<@.*\|.*> (has (joined|left) the channel|set the channel (purpose|topic))/;
+
+            if (message.match(regex))
+            {
+                console.log(message);
+                return undefined;
+            }
+            else
+            {
+                return `On Slack, ${ user } said: ${ message }`;
+            }
+        }
+
         switch (destination.toLowerCase()) {
         case 'slack':
             message = `On Twitch, *${ user }* said: \n>>>${ message }`;
             this.slackBot.postMessageToChannel(this.slackChannel, message);
             break;
         case 'twitch':
-            message = `On Slack, ${ user } said: ${ message }`;
-            this.twitchBot.action(this.twitchChannel, message);
+            message = getMessageForTwitch();
+            if (message)
+            {
+                this.twitchBot.action(this.twitchChannel, message);
+            }
             break;
         default:
             console.error('Trying to send message to unknown destination.');
