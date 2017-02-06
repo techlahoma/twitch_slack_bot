@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - bidibot.js</title>
+  <title>Plato - BidiBot.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -39,7 +39,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>bidibot.js</h1>
+    <h1>BidiBot.js</h1>
   </div>
 </div>
 
@@ -47,11 +47,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.46</p>
+      <p class="stat">77.29</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">99</p>
+      <p class="stat">21</p>
     </div>
   </div>
   <div class="row historical">
@@ -65,11 +65,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">25.17</p>
+      <p class="stat">7.58</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.85</p>
+      <p class="stat">0.12</p>
     </div>
   </div>
 </div>
@@ -92,105 +92,27 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">const Bot = require(&#039;slackbots&#039;);
-const tmi = require(&#039;tmi.js&#039;);
-		
+    <textarea id="file-source" class="col-md-12">const SlackBot = require(&#039;./SlackBot&#039;);
+const TwitchBot = require(&#039;./TwitchBot&#039;);
+const Relay = require(&#039;./Relay&#039;);
 
+class BidiBot {
+    constructor(settings) {
+        this.settings = settings;
+    }
 
-let bidi = function Constructor(args){
-	if(args){
-		this.settings =args;
-	}
+    start() {
+        const chatRelay = new Relay(this.settings.slackChannel, this.settings.twitchChannel);
+        const slackBot = new SlackBot(this.settings, chatRelay);
+        const twitchBot = new TwitchBot(this.settings, chatRelay);
+
+        slackBot.setup();
+        twitchBot.setup();
+    }
 }
 
-bidi.prototype.start = function(){
-	let slackusers = {};	
-	let slackchannels = {};
-	let twitchusers = {};
-	let settings = this.settings;
-	let _slackBotSettings = {};
-	_slackBotSettings.token= settings.slackKey;
-	_slackBotSettings.name= settings.slackName;
-	let _twitchBotSettings = {};
-	_twitchBotSettings.options = {
-		debug:true
-	};
-	_twitchBotSettings.connection = {
-		reconnect:true
-	}
-	_twitchBotSettings.identity = {
-		username:settings.twitchName,
-		password:settings.twitchKey
-	};
-	_twitchBotSettings.channels = [];
-	_twitchBotSettings.channels.push(settings.twitchChannel);
-
-	let bot = new Bot(_slackBotSettings);
-
-	bot.on(&#039;start&#039;, function() {
-		console.log(&#039;slack bot has started&#039;)
-		users = bot.users.filter(user=&gt; user.name != bot.name);
-		channels = bot.channels;
-	});
-
-	bot.on(&#039;message&#039;, function(message){
-		if(message.channel){
-			let channel = channels.map(x =&gt; x.id).indexOf(message.channel);
-				if(channels[channel].name == settings.slackChannel){
-					let user = users.map(x =&gt; {
-						return x.id;
-					}).indexOf(message.user);
-					if(message.type == &quot;message&quot; &amp;&amp; message.text &amp;&amp; user != -1){
-							let string = slackToTwitch(users[user].name,message.text);	
-							console.log(&#039;the slack to twitch string is... &#039;, string);
-							console.log(_twitchBotSettings.channels[0]);
-							client.action(_twitchBotSettings.channels[0],string);	
-					}
-				}
-		}
-	})
-
-
-	let client = new tmi.client(_twitchBotSettings);
-	
-	client.connect();
-			
-	client.on(&#039;connected&#039;, function(){
-		console.log(&#039;twitch bot has started!&#039;);
-	})
-
-	client.on(&#039;chat&#039;, function(channel, user, message, self){
-		console.log(&#039;twitch user is chatting...&#039;);
-		if(self !=true){
-			let string = twitchToSlack(user.username,message);
-			bot.postMessageToChannel(settings.slackChannel,string);	
-		}
-	})
-
-	function twitchToSlack(username,message){
-
-		if(username &amp;&amp; message){
-			console.log(&quot;twitch to slack settings&quot;, settings);
-			let _string = &quot;On Twitch, *&quot; + username + &quot;* said: \n&gt;&gt;&gt;&quot; + message;
-			return _string;
-		}	
-	}
-
-	function slackToTwitch(username,message){
-		if(username &amp;&amp; message){
-			console.log(&#039;slack to twitch settings&#039;, settings);
-			let _string = &quot;On Slack, &quot; + username + &quot; said: &quot; + message;
-			return _string;
-		}
-	}
-}
-
-
-
-
-
-
-module.exports = bidi;</textarea>
+module.exports = BidiBot;
+</textarea>
   </div>
 </div>
 
