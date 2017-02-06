@@ -1,22 +1,22 @@
 const plato = require('es6-plato');
-let src = 'bidibot.js';
+let src = 'BidiBot.js';
 let outputDir = './report';
  
 let platoArgs = {
-  title: 'BidiBot Report',
-  eslint: {}
+    title: 'BidiBot Report',
+    eslint: {}
 };
  
 //you can use the reports in the callback. 
 function callback(reports){
-  let overview = plato.getOverviewReport(reports);
+    let overview = plato.getOverviewReport(reports);
  
-  let {
-    total,
-    average
-  } = overview.summary;
+    let {
+      total,
+      average
+    } = overview.summary;
  
-  let output = `total
+    let output = `total
     ----------------------
     eslint: ${total.eslint}
     sloc: ${total.sloc}
@@ -27,9 +27,8 @@ function callback(reports){
     sloc: ${average.sloc}
     maintainability: ${average.maintainability}`;
  
-  console.log(output);
+    console.log(output);
 }
- 
- 
+
 //usage is plato.inspect 
 plato.inspect(src, outputDir, platoArgs, callback);

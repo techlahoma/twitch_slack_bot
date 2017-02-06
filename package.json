@@ -1,8 +1,8 @@
 {
   "name": "twitch_chat_bot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A slack integration for twitch",
-  "main": "irc.js",
+  "main": "server.js",
   "dependencies": {
     "es6-plato": "^1.0.12",
     "slackbots": "^1.0.2",
@@ -13,5 +13,8 @@
     "start": "node irc.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^3.15.0"
+  }
 }
