@@ -12,6 +12,7 @@ const badJSON = require('./fixtures/badSlack.config.js');
 
 chai.should();
 
+
 describe('SlackBot', () => {
 
 	const sandbox = sinon.sandbox.create({
