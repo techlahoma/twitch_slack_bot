@@ -1,5 +1,5 @@
 const plato = require('es6-plato');
-let src = 'BidiBot.js';
+let src = ['bidibot.js','Relay.js','SlackBot.js','TwitchBot.js'];
 let outputDir = './report';
  
 let platoArgs = {
