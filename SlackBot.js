@@ -42,11 +42,40 @@ class SlackBot {
                 message.type === 'message' &&
                 message.user &&
                 message.text && botIds.indexOf(message.user) === -1) {
+
+                function getUserNameByID(id)
+                {
+                    return slackBot.users.filter(user => user.id === id)[0].name;
+                }
+
+                function replaceUserNames(messageText)
+                {
+                    var tagsRegex = /<@\w{9}>/g;
+                    var idRegex = /\w{9}/;
+                    var tags = messageText.match(tagsRegex);
+
+                    for (var i = 0; i < tags.length; i++)
+                    {
+                        var tag = tags[i];
+                        var id = tag.match(idRegex)[0];
+                        var username = getUserNameByID(id);
+
+                        if (username)
+                        {
+                            messageText = messageText.replace(tag, '@' + username);
+                        }
+                    }
+
+                    return messageText;
+                }
+
                 // Get the user name from the user id.
-                let user = slackBot.users.filter(user => user.id === message.user)[0].name;
+                let user = getUserNameByID(message.user);
+
+                let messageText = replaceUserNames(message.text);
 
                 // Inform Relay of the message to send to Twitch.
-                this.relay.sendMessage(user, message.text, 'twitch');
+                this.relay.sendMessage(user, messageText, 'twitch');
             }
         });
     }
