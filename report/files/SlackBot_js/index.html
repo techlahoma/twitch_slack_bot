@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Plato - bidibot.js</title>
+  <title>Plato - SlackBot.js</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
@@ -39,7 +39,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>bidibot.js</h1>
+    <h1>SlackBot.js</h1>
   </div>
 </div>
 
@@ -47,11 +47,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.29</p>
+      <p class="stat">74.68</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">21</p>
+      <p class="stat">85</p>
     </div>
   </div>
   <div class="row historical">
@@ -65,11 +65,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">7.58</p>
+      <p class="stat">30.83</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.12</p>
+      <p class="stat">0.64</p>
     </div>
   </div>
 </div>
@@ -92,26 +92,90 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="col-md-12">const SlackBot = require(&#039;./SlackBot&#039;);
-const TwitchBot = require(&#039;./TwitchBot&#039;);
-const Relay = require(&#039;./Relay&#039;);
+    <textarea id="file-source" class="col-md-12">const Bot = require(&#039;slackbots&#039;);
 
-class BidiBot {
-    constructor(settings) {
-        this.settings = settings;
+class SlackBot {
+    constructor(settings, relay) {
+        this.slackBotSettings = {
+            token: settings.slackKey,
+            name: settings.slackName
+        };
+
+        this.channel = settings.slackChannel;
+
+        this.bot = new Bot(this.slackBotSettings);
+        this.relay = relay;
+        this.relay.createBot(this.bot, &#039;slack&#039;);
     }
 
-    start() {
-        const chatRelay = new Relay(this.settings.slackChannel, this.settings.twitchChannel);
-        const slackBot = new SlackBot(this.settings, chatRelay);
-        const twitchBot = new TwitchBot(this.settings, chatRelay);
+    // Setup Slackbot actions
+    setup() {
+        let slackBot = this.bot;
+        let botIds = [];
+        let channelId;
+        
+        slackBot.on(&#039;start&#039;, () =&gt; {
+            console.log(&#039;SlackBot started!&#039;);
 
-        slackBot.setup();
-        twitchBot.setup();
+            // Get a list of all the bot ids in Slack.
+            // TODO: make this configurable?
+            botIds = slackBot.users
+                .filter(user =&gt; user.name === slackBot.name || user.name === &#039;slackbot&#039;)
+                .map(bot =&gt; bot.id);
+            console.log(&#039;bot ids:&#039;, botIds);
+
+            // Get the channel id for the channel we&#039;re watching on Slack.
+            channelId = slackBot.channels
+                .filter(channel =&gt; channel.name === this.channel)[0].id;
+        });
+
+        slackBot.on(&#039;message&#039;, (message) =&gt; {
+            // If the incoming message is from the channel we&#039;re watching, is of type &quot;message&quot;, 
+            // has text and doesn&#039;t belong to one of the bot users...
+            if (message.channel == channelId &amp;&amp; 
+                message.type === &#039;message&#039; &amp;&amp;
+                message.user &amp;&amp;
+                message.text &amp;&amp; botIds.indexOf(message.user) === -1) {
+
+                function getUserNameByID(id)
+                {
+                    return slackBot.users.filter(user =&gt; user.id === id)[0].name;
+                }
+
+                function replaceUserNames(messageText)
+                {
+                    var tagsRegex = /&lt;@\w{9}&gt;/g;
+                    var idRegex = /\w{9}/;
+                    var tags = messageText.match(tagsRegex);
+
+                    for (var i = 0; i &lt; tags.length; i++)
+                    {
+                        var tag = tags[i];
+                        var id = tag.match(idRegex)[0];
+                        var username = getUserNameByID(id);
+
+                        if (username)
+                        {
+                            messageText = messageText.replace(tag, &#039;@&#039; + username);
+                        }
+                    }
+
+                    return messageText;
+                }
+
+                // Get the user name from the user id.
+                let user = getUserNameByID(message.user);
+
+                let messageText = replaceUserNames(message.text);
+
+                // Inform Relay of the message to send to Twitch.
+                this.relay.sendMessage(user, messageText, &#039;twitch&#039;);
+            }
+        });
     }
 }
 
-module.exports = BidiBot;
+module.exports = SlackBot;
 </textarea>
   </div>
 </div>
