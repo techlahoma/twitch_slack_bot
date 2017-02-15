@@ -20,6 +20,8 @@ describe('SlackBot', () => {
 		useFakeServer: false
 	});
 
+	
+
 	beforeEach(() => {
 		this.infoStub = sandbox.stub(logger,'info');
 		this.debugStub = sandbox.stub(logger,'debug');
@@ -38,9 +40,14 @@ describe('SlackBot', () => {
 	it('should fail to create a bot without full configurations', (config = badJSON, relay =Relay) => {
 		let bot = new BidiBot(config);
 
-		chai.assert.isNotOk(bot.isObject,"This will pass, if the bot fails to load because it's missing twitch settings");
+		chai.assert.isNotOk(bot,"This will pass, if the bot fails to load because it's missing twitch settings");
 	})
 
+	it('should create a new bot if it recieves full configurations', (config = goodJSON, relay =Relay) => {
+		let bot = new BidiBot(config);
+
+		chai.assert.isOk(bot.isObject,"This will pass, if the bot fails to load because it's missing twitch settings");
+	})
 
 })
 
