@@ -53,17 +53,20 @@ class SlackBot {
                     var tagsRegex = /<@\w{9}>/g;
                     var idRegex = /\w{9}/;
                     var tags = messageText.match(tagsRegex);
+                    console.log(messageText)
+                    console.log(tags)
+                    if(tags){
+                      for (var i = 0; i < tags.length; i++)
+                      {
+                          var tag = tags[i];
+                          var id = tag.match(idRegex)[0];
+                          var username = getUserNameByID(id);
 
-                    for (var i = 0; i < tags.length; i++)
-                    {
-                        var tag = tags[i];
-                        var id = tag.match(idRegex)[0];
-                        var username = getUserNameByID(id);
-
-                        if (username)
-                        {
-                            messageText = messageText.replace(tag, '@' + username);
-                        }
+                          if (username)
+                          {
+                              messageText = messageText.replace(tag, '@' + username);
+                          }
+                      }
                     }
 
                     return messageText;

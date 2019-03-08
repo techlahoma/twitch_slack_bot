@@ -1,4 +1,4 @@
-const BidiBot = require('./BidiBot');
+const BidiBot = require('./bidibot');
 const config = require('./config');
 const http = require('http');
 
