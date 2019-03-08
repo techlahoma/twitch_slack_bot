@@ -1,6 +1,10 @@
 const BidiBot = require('./bidibot');
-const config = require('./config');
 const http = require('http');
+
+try {
+  const config = require('./config');
+}catch(ex){
+}
 
 const herokuUrl = process.env.HEROKU_URL;
 
