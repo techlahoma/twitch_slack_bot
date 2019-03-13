@@ -6,19 +6,11 @@ try {
 }catch(ex){
 }
 
-const herokuUrl = process.env.HEROKU_URL;
-
 // Create and start listening on server.
 http.createServer((req,res) =>{
     res.writeHead(404, {'Content-Type': 'text/html'});
     res.end('This is a relay server');
 }).listen(process.env.PORT || 8080);
-
-// Ping server to keep alive.
-setInterval(() => {
-    console.log('ping sent to server for keep alive');
-    http.get(`http://${ herokuUrl }.herokuapp.com`);
-}, 100000);
 
 // Config options
 const slackKey = process.env.SLACK_KEY || config.slackKey,
